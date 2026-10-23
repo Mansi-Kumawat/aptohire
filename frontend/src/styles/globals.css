@@ -1,0 +1,72 @@
+@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource/jetbrains-mono/400.css';
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background-color: var(--canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  /* Accessible focus outline */
+  :focus-visible {
+    outline: 2px solid var(--verdant-700);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px #ffffff;
+  }
+
+  /* Tabular numbers for scores and stats */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Reading max width constraint */
+  .prose-reading {
+    max-width: 68ch;
+  }
+}
+
+/* Print styling for verification page */
+@media print {
+  header,
+  footer,
+  .no-print,
+  #prototype-notice-bar,
+  #privacy-notice-bar {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}

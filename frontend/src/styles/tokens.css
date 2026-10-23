@@ -1,0 +1,68 @@
+:root {
+  --canvas: #ffffff;
+  --nav-glass: rgba(255, 255, 255, 0.88);
+  --mist: #f6f8f7;
+  --hairline: #e3e8e5;
+  --ink: #17261e;
+  --moss: #5b6a62;
+
+  --verdant-50: #ecfaf2;
+  --verdant-100: #d2f3e1;
+  --verdant-300: #8fe0b2;
+  --verdant-600: #0e9f5b;
+  --verdant-700: #0b7f49;
+  --verdant-800: #0a6139;
+
+  --ember-50: #fff3e8;
+  --ember-100: #ffe2c7;
+  --ember-300: #ffb470;
+  --ember-500: #ff7a1a;
+  --ember-700: #b94a06;
+
+  --danger-50: #fdece9;
+  --danger-600: #c4311f;
+
+  --grad-dawn: linear-gradient(135deg, #e6f8ee 0%, #ffffff 46%, #ffebd6 100%);
+  --grad-mesh:
+    radial-gradient(60% 60% at 12% 8%, #ddf6e8 0%, transparent 70%),
+    radial-gradient(50% 50% at 92% 88%, #ffe7d0 0%, transparent 70%),
+    #ffffff;
+  --grad-hero-sleek:
+    radial-gradient(55% 55% at 10% 15%, rgba(14, 159, 91, 0.13) 0%, transparent 70%),
+    radial-gradient(50% 50% at 90% 25%, rgba(255, 122, 26, 0.09) 0%, transparent 70%),
+    radial-gradient(60% 60% at 50% 100%, rgba(210, 243, 225, 0.25) 0%, transparent 80%),
+    linear-gradient(180deg, #ffffff 0%, #f7faf8 100%);
+  --grad-verified: linear-gradient(135deg, #0e9f5b, #34c98a);
+  --grad-section-subtle: linear-gradient(180deg, rgba(236, 250, 242, 0.35) 0%, #ffffff 50%, rgba(246, 248, 247, 0.6) 100%);
+  --grad-section-warm: linear-gradient(180deg, #ffffff 0%, rgba(255, 243, 232, 0.3) 50%, #ffffff 100%);
+  --grad-cta:
+    radial-gradient(80% 80% at 50% 0%, rgba(14, 159, 91, 0.09) 0%, transparent 70%),
+    linear-gradient(180deg, #f6f8f7 0%, #ffffff 100%);
+
+  --r-control: 10px;
+  --r-panel: 16px;
+  --r-feature: 28px;
+
+  --shadow-1: 0 1px 2px rgba(23, 38, 30, 0.06), 0 8px 24px -10px rgba(23, 38, 30, 0.14);
+  --shadow-2: 0 2px 4px rgba(23, 38, 30, 0.06), 0 24px 48px -16px rgba(23, 38, 30, 0.22);
+
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Instrument Sans Variable", "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-base: 220ms;
+  --dur-reveal: 900ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
