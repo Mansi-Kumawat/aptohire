@@ -20,6 +20,21 @@ function getAuthHeaders(): HeadersInit {
 }
 
 /**
+ * Converts the university form's comma-separated text field into the array
+ * required by the frozen/backend submit-application contract.
+ */
+function normalizeApplicationPayload(payload: ApplicationSubmissionInput) {
+  if (payload.type !== 'university') return payload;
+
+  const email_domains = (payload.email_domains ?? '')
+    .split(',')
+    .map((domain) => domain.trim().toLowerCase())
+    .filter(Boolean);
+
+  return { ...payload, email_domains };
+}
+
+/**
  * Public Credential Verification
  * Calls GET /public-verify?id=<credentialId>
  */
@@ -95,7 +110,7 @@ export async function submitApplication(
         ...getAuthHeaders(),
         'Idempotency-Key': key,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(normalizeApplicationPayload(payload)),
     });
 
     const data = await response.json().catch(() => null);
