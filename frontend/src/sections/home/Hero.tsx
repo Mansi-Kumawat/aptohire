@@ -60,7 +60,7 @@ export const Hero: React.FC = () => {
               </div>
               <span className="hidden sm:inline text-hairline">•</span>
               <Link
-                to="/verify/a1b2c3d4e5f6a7b8c9"
+                to="/verify/9efdf52c1c90863fa1"
                 className="inline-flex items-center gap-1 text-verdant-700 hover:text-verdant-800 font-medium hover:underline group"
               >
                 <Sparkles className="w-3.5 h-3.5" />

@@ -104,34 +104,34 @@ export const VerifyLookup: React.FC = () => {
             <div className="space-y-1 text-[13px] font-mono">
               <div>
                 <Link
-                  to="/verify/a1b2c3d4e5f6a7b8c9"
+                  to="/verify/9efdf52c1c90863fa1"
                   className="text-verdant-700 hover:underline block py-1"
                 >
-                  a1b2c3d4e5f6a7b8c9 (Full with scores)
+                  9efdf52c1c90863fa1 (Full with scores)
                 </Link>
               </div>
               <div>
                 <Link
-                  to="/verify/b2c3d4e5f6a7b8c9d0"
+                  to="/verify/13704e2ffdef3a2608"
                   className="text-verdant-700 hover:underline block py-1"
                 >
-                  b2c3d4e5f6a7b8c9d0 (Levels only)
+                  13704e2ffdef3a2608 (Levels only)
                 </Link>
               </div>
               <div>
                 <Link
-                  to="/verify/c3d4e5f6a7b8c9d0e1"
+                  to="/verify/299ba16f0bf36e633c"
                   className="text-verdant-700 hover:underline block py-1"
                 >
-                  c3d4e5f6a7b8c9d0e1 (Nothing shared)
+                  299ba16f0bf36e633c (Nothing shared)
                 </Link>
               </div>
               <div>
                 <Link
-                  to="/verify/d4e5f6a7b8c9d0e1f2"
+                  to="/verify/d0cc59fd5f27fec869"
                   className="text-verdant-700 hover:underline block py-1"
                 >
-                  d4e5f6a7b8c9d0e1f2 (Unverified university)
+                  d0cc59fd5f27fec869 (Unverified university)
                 </Link>
               </div>
             </div>

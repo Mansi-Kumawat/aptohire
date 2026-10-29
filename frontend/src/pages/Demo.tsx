@@ -26,10 +26,10 @@ const DEMO_ACCOUNTS = [
 ];
 
 const SAMPLE_CREDENTIAL_IDS = [
-  { id: 'a1b2c3d4e5f6a7b8c9', label: 'Full Credential (Aarav S. · Uni A Roster · 3 Verified Skills)' },
-  { id: 'b2c3d4e5f6a7b8c9d0', label: 'Levels Only (Anonymous · No Scores Shared)' },
-  { id: 'c3d4e5f6a7b8c9d0e1', label: 'Empty State (Student shares no skills publicly)' },
-  { id: 'd4e5f6a7b8c9d0e1f2', label: 'Unverified Affiliation (Self-reported college chip)' },
+  { id: '9efdf52c1c90863fa1', label: 'Full Credential (Aarav S. · Uni A Roster · 3 Verified Skills)' },
+  { id: 'dacbbe92e479be681c', label: 'Levels Only (Anonymous · No Scores Shared)' },
+  { id: 'd0cc59fd5f27fec869', label: 'Empty State (Student shares no skills publicly)' },
+  { id: '206790fbf3866c773a', label: 'Unverified Affiliation (Self-reported college chip)' },
   { id: 'e5f6a7b8c9d0e1f2a3', label: 'Rate-Limit Test (Returns 429 Retry-After)' },
 ];
 
