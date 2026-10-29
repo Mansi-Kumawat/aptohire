@@ -9,12 +9,39 @@ import {
 import { AppApiError } from './schemas/errors';
 import { mockPublicVerify, mockSubmitApplication } from './mocks/handlers';
 
-const BASE_URL = `${env.VITE_SUPABASE_URL}/functions/v1`;
+function getSupabaseFunctionsUrl(): string {
+  const projectUrl = env.VITE_SUPABASE_URL.trim();
+  const anonKey = env.VITE_SUPABASE_ANON_KEY.trim();
+  if (!projectUrl || !anonKey) {
+    throw new AppApiError(
+      'Supabase is not configured for real mode. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY, then redeploy.',
+      'CONFIGURATION_ERROR',
+      503
+    );
+  }
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(projectUrl);
+  } catch {
+    throw new AppApiError('VITE_SUPABASE_URL must be a valid Supabase project URL.', 'CONFIGURATION_ERROR', 503);
+  }
+  const localHost = ['localhost', '127.0.0.1', '::1'].includes(parsedUrl.hostname);
+  if (parsedUrl.protocol !== 'https:' && !(env.VITE_APP_ENV === 'local' && localHost)) {
+    throw new AppApiError('VITE_SUPABASE_URL must use HTTPS outside local development.', 'CONFIGURATION_ERROR', 503);
+  }
+  if (/placeholder|example/i.test(parsedUrl.hostname) || anonKey === 'placeholder-anon-key') {
+    throw new AppApiError('Supabase environment variables still contain placeholder values.', 'CONFIGURATION_ERROR', 503);
+  }
+
+  return `${projectUrl.replace(/\/+$/, '')}/functions/v1`;
+}
 
 function getAuthHeaders(): HeadersInit {
+  const anonKey = env.VITE_SUPABASE_ANON_KEY.trim();
   return {
-    apikey: env.VITE_SUPABASE_ANON_KEY,
-    Authorization: `Bearer ${env.VITE_SUPABASE_ANON_KEY}`,
+    apikey: anonKey,
+    Authorization: `Bearer ${anonKey}`,
     'Content-Type': 'application/json',
   };
 }
@@ -49,8 +76,9 @@ export async function verifyCredential(credentialId: string): Promise<{ credenti
     return mockPublicVerify(credentialId);
   }
 
+  const functionsUrl = getSupabaseFunctionsUrl();
   try {
-    const response = await fetch(`${BASE_URL}/public-verify?id=${encodeURIComponent(credentialId)}`, {
+    const response = await fetch(`${functionsUrl}/public-verify?id=${encodeURIComponent(credentialId)}`, {
       method: 'GET',
       headers: getAuthHeaders(),
     });
@@ -101,10 +129,11 @@ export async function submitApplication(
     return mockSubmitApplication(payload);
   }
 
+  const functionsUrl = getSupabaseFunctionsUrl();
   const key = idempotencyKey || (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `ah-${Date.now()}`);
 
   try {
-    const response = await fetch(`${BASE_URL}/submit-application`, {
+    const response = await fetch(`${functionsUrl}/submit-application`, {
       method: 'POST',
       headers: {
         ...getAuthHeaders(),
