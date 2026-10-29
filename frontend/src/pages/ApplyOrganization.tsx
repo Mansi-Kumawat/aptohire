@@ -5,7 +5,7 @@ import {
   organizationApplicationSchema,
   type OrganizationApplicationInput,
 } from '@/lib/schemas/application';
-import { submitApplication } from '@/lib/api';
+import { createIdempotencyKey, submitApplication } from '@/lib/api';
 import { AppApiError } from '@/lib/schemas/errors';
 import { Seo } from '@/lib/seo';
 import { Field } from '@/components/ui/Field';
@@ -31,9 +31,7 @@ export const ApplyOrganization: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successReference, setSuccessReference] = useState<string | null>(null);
   const [serverError, setServerError] = useState<{ message: string; type: 'error' | 'warning' } | null>(null);
-  const idempotencyKeyRef = useRef<string>(
-    typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `org-${Date.now()}`
-  );
+  const idempotencyKeyRef = useRef<string>(createIdempotencyKey());
   const loadTimeRef = useRef<number>(Date.now());
 
   const {
@@ -87,8 +85,7 @@ export const ApplyOrganization: React.FC = () => {
     try {
       const result = await submitApplication(data, idempotencyKeyRef.current);
       setSuccessReference(result.reference);
-      idempotencyKeyRef.current =
-        typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `org-${Date.now()}`;
+      idempotencyKeyRef.current = createIdempotencyKey();
     } catch (err: unknown) {
       if (err instanceof AppApiError) {
         if (err.status === 422 && err.fields) {

@@ -280,7 +280,7 @@ export const VerifyCredential: React.FC = () => {
                           {skill.name}
                         </h3>
                         <p className="text-[14px] text-moss mt-0.5">
-                          {skill.level} · Verified on {formatDate(skill.verified_on)}
+                          {skill.level}{skill.verified_on ? ` · Verified on ${formatDate(skill.verified_on)}` : ' · Verified'}
                         </p>
                       </div>
                     </div>

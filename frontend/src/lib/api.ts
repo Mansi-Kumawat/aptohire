@@ -37,6 +37,25 @@ function getSupabaseFunctionsUrl(): string {
   return `${projectUrl.replace(/\/+$/, '')}/functions/v1`;
 }
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+export function createIdempotencyKey(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+
+  const bytes = new Uint8Array(16);
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    crypto.getRandomValues(bytes);
+  } else {
+    for (let index = 0; index < bytes.length; index += 1) bytes[index] = Math.floor(Math.random() * 256);
+  }
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 function getAuthHeaders(): HeadersInit {
   const anonKey = env.VITE_SUPABASE_ANON_KEY.trim();
   return {
@@ -57,8 +76,16 @@ function normalizeApplicationPayload(payload: ApplicationSubmissionInput) {
     .split(',')
     .map((domain) => domain.trim().toLowerCase())
     .filter(Boolean);
+  const { contact_phone, ...universityPayload } = payload;
+  const contactPhone = contact_phone?.trim();
 
-  return { ...payload, email_domains };
+  // The backend accepts contact_phone only when it is a non-empty phone value.
+  // React Hook Form submits a blank optional input as an empty string, so omit it.
+  return {
+    ...universityPayload,
+    email_domains,
+    ...(contactPhone ? { contact_phone: contactPhone } : {}),
+  };
 }
 
 /**
@@ -130,7 +157,9 @@ export async function submitApplication(
   }
 
   const functionsUrl = getSupabaseFunctionsUrl();
-  const key = idempotencyKey || (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `ah-${Date.now()}`);
+  const key = idempotencyKey && UUID_PATTERN.test(idempotencyKey)
+    ? idempotencyKey
+    : createIdempotencyKey();
 
   try {
     const response = await fetch(`${functionsUrl}/submit-application`, {

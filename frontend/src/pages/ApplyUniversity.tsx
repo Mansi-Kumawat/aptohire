@@ -5,7 +5,7 @@ import {
   universityApplicationSchema,
   type UniversityApplicationInput,
 } from '@/lib/schemas/application';
-import { submitApplication } from '@/lib/api';
+import { createIdempotencyKey, submitApplication } from '@/lib/api';
 import { AppApiError } from '@/lib/schemas/errors';
 import { portalUrl } from '@/config/portals';
 import { Seo } from '@/lib/seo';
@@ -24,9 +24,7 @@ export const ApplyUniversity: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successReference, setSuccessReference] = useState<string | null>(null);
   const [serverError, setServerError] = useState<{ message: string; type: 'error' | 'warning' } | null>(null);
-  const idempotencyKeyRef = useRef<string>(
-    typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `uni-${Date.now()}`
-  );
+  const idempotencyKeyRef = useRef<string>(createIdempotencyKey());
   const loadTimeRef = useRef<number>(Date.now());
 
   const {
@@ -65,8 +63,7 @@ export const ApplyUniversity: React.FC = () => {
       const result = await submitApplication(data, idempotencyKeyRef.current);
       setSuccessReference(result.reference);
       // Regenerate idempotency key only after successful submit
-      idempotencyKeyRef.current =
-        typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `uni-${Date.now()}`;
+      idempotencyKeyRef.current = createIdempotencyKey();
     } catch (err: unknown) {
       if (err instanceof AppApiError) {
         if (err.status === 422 && err.fields) {

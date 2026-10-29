@@ -5,7 +5,7 @@ export const skillItemSchema = z.object({
   level: z.string(),
   verified: z.boolean(),
   score: z.number().min(0).max(100).optional(),
-  verified_on: z.string(),
+  verified_on: z.string().optional(),
 });
 
 export const affiliationSchema = z.object({
